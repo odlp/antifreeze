@@ -1,0 +1,11 @@
+---
+applications:
+  - name: app-name
+    memory: 256M
+    instances: 1
+    services:
+      - service-1
+      - service-2
+    env:
+      ENV_VAR_1: 1800
+      ENV_VAR_2: https://pivotal.io
