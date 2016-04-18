@@ -19,7 +19,7 @@ type AntifreezePlugin struct{}
 
 func (c *AntifreezePlugin) Run(cliConnection plugin.CliConnection, args []string) {
 	if args[0] == "check-manifest" {
-		fmt.Println("Running the check-manifest")
+		fmt.Println("Running check-manifest...")
 
 		appName, manifestPath, err := ParseArgs(args)
 		fatalIf(err)
@@ -37,20 +37,7 @@ func (c *AntifreezePlugin) Run(cliConnection plugin.CliConnection, args []string
 			os.Exit(0)
 		}
 
-		if len(missingEnv) > 0 {
-			fmt.Printf("\nApp '%s' has unexpected ENV vars (missing from manifest %s):\n", appName, manifestPath)
-			for _, v := range missingEnv {
-				fmt.Printf("%s\n", v)
-			}
-		}
-
-		if len(missingServices) > 0 {
-			fmt.Printf("\nApp '%s' has unexpected services (missing from manifest %s):\n", appName, manifestPath)
-			for _, v := range missingServices {
-				fmt.Printf("%s\n", v)
-			}
-		}
-
+		printMissingValues(appName, manifestPath, missingEnv, missingServices)
 		os.Exit(1)
 	}
 }
@@ -165,5 +152,21 @@ func fatalIf(err error) {
 	if err != nil {
 		fmt.Fprintln(os.Stdout, "error:", err)
 		os.Exit(1)
+	}
+}
+
+func printMissingValues(appName string, manifestPath string, missingEnv []string, missingServices []string) {
+	if len(missingEnv) > 0 {
+		fmt.Printf("\nApp '%s' has unexpected ENV vars (missing from manifest %s):\n", appName, manifestPath)
+		for _, v := range missingEnv {
+			fmt.Printf("- %s\n", v)
+		}
+	}
+
+	if len(missingServices) > 0 {
+		fmt.Printf("\nApp '%s' has unexpected services (missing from manifest %s):\n", appName, manifestPath)
+		for _, v := range missingServices {
+			fmt.Printf("- %s\n", v)
+		}
 	}
 }
