@@ -1,12 +1,14 @@
 # Antifreeze
 
-[Cloud Foundry](https://www.cloudfoundry.org/) plugin to detect if an app has unexpected ENV vars or services bound which are missing from the manifest. Eliminate the snowflake!
+[![Build Status](https://travis-ci.org/odlp/antifreeze.svg?branch=master)](https://travis-ci.org/odlp/antifreeze)
 
-Doubleplusgood with [Autopilot](https://github.com/concourse/autopilot), a CF plugin for zero downtime application deploys, which demands an up-to-date manifest file.
+[Cloud Foundry](https://www.cloudfoundry.org/) CLI plugin to detect if an app has unexpected ENV vars or services bound which are missing from the manifest. Eliminate the snowflake!
+
+Doubleplusgood with [Autopilot](https://github.com/concourse/autopilot), a CF CLI plugin for zero downtime application deploys, which demands an up-to-date manifest file.
 
 ## Installation
 
-```
+```sh
 go get github.com/odlp/antifreeze
 cf install-plugin $GOPATH/bin/antifreeze
 ```
@@ -28,6 +30,23 @@ App 'your-app-name' has unexpected ENV vars (missing from manifest ./manifest.ym
 App 'your-app-name' has unexpected services (missing from manifest ./manifest.yml):
 - surprise-service
 ```
+
+And the `check-manifest` command will exit with a non-zero status.
+
+### Example with Autopilot
+
+Your deployment script could include:
+
+```sh
+#!/bin/bash
+
+set -e
+
+cf check-manifest your-app-name -f manifest.yml
+cf zero-downtime-push your-app-name -f manifest.yml
+
+```
+
 
 ## Development
 
