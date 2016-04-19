@@ -10,7 +10,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestDeice(t *testing.T) {
+func TestAntifreeze(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "Antifreeze Suite")
 }

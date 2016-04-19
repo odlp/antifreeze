@@ -1,5 +1,5 @@
 #!/bin/bash
 
-cf uninstall-plugin AntifreezePlugin
+cf uninstall-plugin antifreeze
 go build
 cf install-plugin ./antifreeze -f

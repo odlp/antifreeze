@@ -44,10 +44,10 @@ func (c *AntifreezePlugin) Run(cliConnection plugin.CliConnection, args []string
 
 func (c *AntifreezePlugin) GetMetadata() plugin.PluginMetadata {
 	return plugin.PluginMetadata{
-		Name: "AntifreezePlugin",
+		Name: "antifreeze",
 		Version: plugin.VersionType{
 			Major: 0,
-			Minor: 1,
+			Minor: 2,
 			Build: 0,
 		},
 		MinCliVersion: plugin.VersionType{
@@ -65,7 +65,7 @@ func (c *AntifreezePlugin) GetMetadata() plugin.PluginMetadata {
 }
 
 func ParseArgs(args []string) (string, string, error) {
-	flags := flag.NewFlagSet("validate-manifest-ok", flag.ContinueOnError)
+	flags := flag.NewFlagSet("check-manifest", flag.ContinueOnError)
 	manifestPath := flags.String("f", "", "path to an application manifest")
 	err := flags.Parse(args[2:])
 
