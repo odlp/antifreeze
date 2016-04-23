@@ -18,28 +18,31 @@ func main() {
 type AntifreezePlugin struct{}
 
 func (c *AntifreezePlugin) Run(cliConnection plugin.CliConnection, args []string) {
-	if args[0] == "check-manifest" {
-		fmt.Println("Running check-manifest...")
-
-		appName, manifestPath, err := ParseArgs(args)
-		fatalIf(err)
-
-		manifestEnv, manifestServices, err := ParseManifest(manifestPath)
-		fatalIf(err)
-
-		appEnv, appServices, err := GetAppEnvAndServices(cliConnection, appName)
-		fatalIf(err)
-
-		missingEnv := MissingFromManifest(manifestEnv, appEnv)
-		missingServices := MissingFromManifest(manifestServices, appServices)
-
-		if len(missingEnv) == 0 && len(missingServices) == 0 {
-			os.Exit(0)
-		}
-
-		printMissingValues(appName, manifestPath, missingEnv, missingServices)
-		os.Exit(1)
+	if args[0] != "check-manifest" {
+		os.Exit(0)
 	}
+
+	fmt.Println("Running check-manifest...")
+
+	appName, manifestPath, err := ParseArgs(args)
+	fatalIf(err)
+
+	manifestEnv, manifestServices, err := ParseManifest(manifestPath)
+	fatalIf(err)
+
+	appEnv, appServices, err := GetAppEnvAndServices(cliConnection, appName)
+	fatalIf(err)
+
+	missingEnv := MissingFromManifest(manifestEnv, appEnv)
+	missingServices := MissingFromManifest(manifestServices, appServices)
+
+	if len(missingEnv) == 0 && len(missingServices) == 0 {
+		os.Exit(0)
+	}
+
+	printMissingValues(appName, manifestPath, missingEnv, missingServices)
+	os.Exit(1)
+
 }
 
 func (c *AntifreezePlugin) GetMetadata() plugin.PluginMetadata {
@@ -48,7 +51,7 @@ func (c *AntifreezePlugin) GetMetadata() plugin.PluginMetadata {
 		Version: plugin.VersionType{
 			Major: 0,
 			Minor: 2,
-			Build: 0,
+			Build: 1,
 		},
 		MinCliVersion: plugin.VersionType{
 			Major: 6,
@@ -158,15 +161,17 @@ func fatalIf(err error) {
 func printMissingValues(appName string, manifestPath string, missingEnv []string, missingServices []string) {
 	if len(missingEnv) > 0 {
 		fmt.Printf("\nApp '%s' has unexpected ENV vars (missing from manifest %s):\n", appName, manifestPath)
-		for _, v := range missingEnv {
-			fmt.Printf("- %s\n", v)
-		}
+		printListAsBullets(missingEnv)
 	}
 
 	if len(missingServices) > 0 {
 		fmt.Printf("\nApp '%s' has unexpected services (missing from manifest %s):\n", appName, manifestPath)
-		for _, v := range missingServices {
-			fmt.Printf("- %s\n", v)
-		}
+		printListAsBullets(missingServices)
+	}
+}
+
+func printListAsBullets(list []string) {
+	for _, v := range list {
+		fmt.Printf("- %s\n", v)
 	}
 }

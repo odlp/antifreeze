@@ -148,3 +148,15 @@ var _ = Describe("Missing From Manifest", func() {
 		})
 	})
 })
+
+var _ = Describe("GetMetadata", func() {
+	It("returns valid metadata", func() {
+		plugin := AntifreezePlugin{}
+		metadata := plugin.GetMetadata()
+
+		Expect(metadata.Name).To(Equal("antifreeze"))
+		Expect(metadata.Version).ToNot(BeNil())
+		Expect(metadata.MinCliVersion).ToNot(BeNil())
+		Expect(metadata.Commands).To(HaveLen(1))
+	})
+})
