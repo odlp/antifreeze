@@ -42,7 +42,7 @@ var _ = Describe("Flag Parsing", func() {
 
 var _ = Describe("Parsing Manifest", func() {
 	It("parses the ENV keys", func() {
-		envKeys, _, err := ParseManifest("./examples/manifest.yml")
+		envKeys, _, err := ParseManifest("./fixtures/manifest.yml")
 		Expect(err).ToNot(HaveOccurred())
 		Expect(envKeys).To(HaveLen(2))
 		Expect(envKeys).To(ContainElement("ENV_VAR_1"))
@@ -50,7 +50,7 @@ var _ = Describe("Parsing Manifest", func() {
 	})
 
 	It("parses the service names", func() {
-		_, serviceNames, err := ParseManifest("./examples/manifest.yml")
+		_, serviceNames, err := ParseManifest("./fixtures/manifest.yml")
 		Expect(err).ToNot(HaveOccurred())
 		Expect(serviceNames).To(HaveLen(2))
 		Expect(serviceNames).To(ContainElement("service-1"))
@@ -66,7 +66,7 @@ var _ = Describe("Parsing Manifest", func() {
 
 	Context("invalid manifest", func() {
 		It("returns an error", func() {
-			_, _, err := ParseManifest("./examples/invalid-manifest.json")
+			_, _, err := ParseManifest("./fixtures/invalid-manifest.json")
 			Expect(err).To(MatchError("No application found in manifest"))
 		})
 	})
