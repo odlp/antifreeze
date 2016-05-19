@@ -42,7 +42,7 @@ var _ = Describe("Flag Parsing", func() {
 
 var _ = Describe("Parsing Manifest", func() {
 	It("parses the ENV keys", func() {
-		envKeys, _, err := ParseManifest("./fixtures/manifest.yml")
+		envKeys, _, err := ParseManifest("./fixtures/manifest.yml", "app-name")
 		Expect(err).ToNot(HaveOccurred())
 		Expect(envKeys).To(HaveLen(2))
 		Expect(envKeys).To(ContainElement("ENV_VAR_1"))
@@ -50,23 +50,45 @@ var _ = Describe("Parsing Manifest", func() {
 	})
 
 	It("parses the service names", func() {
-		_, serviceNames, err := ParseManifest("./fixtures/manifest.yml")
+		_, serviceNames, err := ParseManifest("./fixtures/manifest.yml", "app-name")
 		Expect(err).ToNot(HaveOccurred())
 		Expect(serviceNames).To(HaveLen(2))
 		Expect(serviceNames).To(ContainElement("service-1"))
 		Expect(serviceNames).To(ContainElement("service-2"))
 	})
 
+	Context("multi-app manifest", func() {
+		It("returns the values for the correct app", func() {
+			envKeys, serviceNames, err := ParseManifest("./fixtures/multi-manifest.yml", "app-2")
+			Expect(err).ToNot(HaveOccurred())
+
+			Expect(serviceNames).To(HaveLen(2))
+			Expect(serviceNames).To(ContainElement("service-3"))
+			Expect(serviceNames).To(ContainElement("service-4"))
+
+			Expect(envKeys).To(HaveLen(2))
+			Expect(envKeys).To(ContainElement("ENV_VAR_3"))
+			Expect(envKeys).To(ContainElement("ENV_VAR_4"))
+		})
+	})
+
+	Context("app doesn't exist in the manifest", func() {
+		It("returns an error", func() {
+			_, _, err := ParseManifest("./fixtures/multi-manifest.yml", "app-666")
+			Expect(err).To(MatchError("Application 'app-666' not found in manifest"))
+		})
+	})
+
 	Context("invalid manifest path", func() {
 		It("returns an error", func() {
-			_, _, err := ParseManifest("./pure-fiction")
+			_, _, err := ParseManifest("./pure-fiction", "fictional-app")
 			Expect(err).To(MatchError("Unable to read manifest file: ./pure-fiction"))
 		})
 	})
 
 	Context("invalid manifest", func() {
 		It("returns an error", func() {
-			_, _, err := ParseManifest("./fixtures/invalid-manifest.json")
+			_, _, err := ParseManifest("./fixtures/invalid-manifest.json", "app-name")
 			Expect(err).To(MatchError("No application found in manifest"))
 		})
 	})

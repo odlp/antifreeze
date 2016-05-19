@@ -27,7 +27,7 @@ func (c *AntifreezePlugin) Run(cliConnection plugin.CliConnection, args []string
 	appName, manifestPath, err := ParseArgs(args)
 	fatalIf(err)
 
-	manifestEnv, manifestServices, err := ParseManifest(manifestPath)
+	manifestEnv, manifestServices, err := ParseManifest(manifestPath, appName)
 	fatalIf(err)
 
 	appEnv, appServices, err := GetAppEnvAndServices(cliConnection, appName)
@@ -50,8 +50,8 @@ func (c *AntifreezePlugin) GetMetadata() plugin.PluginMetadata {
 		Name: "antifreeze",
 		Version: plugin.VersionType{
 			Major: 0,
-			Minor: 2,
-			Build: 1,
+			Minor: 3,
+			Build: 0,
 		},
 		MinCliVersion: plugin.VersionType{
 			Major: 6,
@@ -103,34 +103,29 @@ type YManifest struct {
 }
 
 type YApplication struct {
+	Name     string                 `yaml:"name"`
 	Env      map[string]interface{} `yaml:"env"`
 	Services []string               `yaml:"services"`
 }
 
-func ParseManifest(manifestPath string) ([]string, []string, error) {
-	b, err := ioutil.ReadFile(manifestPath)
+func ParseManifest(manifestPath, appName string) (manifestEnv []string, manifestServices []string, err error) {
+	document, err := loadYAML(manifestPath)
 
 	if err != nil {
-		return []string{}, []string{}, fmt.Errorf("Unable to read manifest file: %s", manifestPath)
+		return manifestEnv, manifestServices, err
 	}
 
-	var document YManifest
-	err = yaml.Unmarshal(b, &document)
+	app, err := findApp(appName, document.Applications)
 
 	if err != nil {
-		return []string{}, []string{}, fmt.Errorf("Unable to parse manifest YAML")
+		return manifestEnv, manifestServices, err
 	}
 
-	if len(document.Applications) == 0 {
-		return []string{}, []string{}, fmt.Errorf("No application found in manifest")
+	for k := range app.Env {
+		manifestEnv = append(manifestEnv, k)
 	}
 
-	envKeys := []string{}
-	for k := range document.Applications[0].Env {
-		envKeys = append(envKeys, k)
-	}
-
-	return envKeys, document.Applications[0].Services, nil
+	return manifestEnv, app.Services, nil
 }
 
 func MissingFromManifest(manifestList, appList []string) (missing []string) {
@@ -140,6 +135,44 @@ func MissingFromManifest(manifestList, appList []string) (missing []string) {
 		}
 	}
 	return missing
+}
+
+func loadYAML(manifestPath string) (manifest YManifest, err error) {
+	b, err := ioutil.ReadFile(manifestPath)
+
+	if err != nil {
+		return YManifest{}, fmt.Errorf("Unable to read manifest file: %s", manifestPath)
+	}
+
+	var document YManifest
+	err = yaml.Unmarshal(b, &document)
+
+	if err != nil {
+		return YManifest{}, fmt.Errorf("Unable to parse manifest YAML")
+	}
+
+	return document, nil
+}
+
+func findApp(appName string, apps []YApplication) (app YApplication, err error) {
+	if len(apps) == 0 {
+		return YApplication{}, fmt.Errorf("No application found in manifest")
+	}
+
+	appIndex := notFoundIndex
+
+	for i := range apps {
+		if apps[i].Name == appName {
+			appIndex = i
+			break
+		}
+	}
+
+	if appIndex == notFoundIndex {
+		return YApplication{}, fmt.Errorf("Application '%s' not found in manifest", appName)
+	}
+
+	return apps[appIndex], nil
 }
 
 func stringInSlice(a string, list []string) bool {
@@ -175,3 +208,5 @@ func printListAsBullets(list []string) {
 		fmt.Printf("- %s\n", v)
 	}
 }
+
+const notFoundIndex = -1
