@@ -64,17 +64,17 @@ cf zero-downtime-push your-app-name -f manifest.yml
 Clone the project & run the following:
 
 ```
-./scripts/dev-setup.sh
+./scripts/setup
 ```
 
 Then you can run tests:
 
 ```
-ginkgo
+./scripts/test
 ```
 
 And build & install locally to give any changes a spin:
 
 ```
-./scripts/install-local.sh
+./scripts/install-local
 ```

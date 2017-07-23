@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+VERSION=$(cat VERSION)
+
+cat <<-NOTES
+Installers
+----------
+- [Debian 32 bit](https://cli.run.pivotal.io/stable?release=debian32&version=$VERSION&source=github-rel)
+- [Debian 64 bit](https://cli.run.pivotal.io/stable?release=debian64&version=$VERSION&source=github-rel)
+- [Redhat 32 bit](https://cli.run.pivotal.io/stable?release=redhat32&version=$VERSION&source=github-rel)
+- [Redhat 64 bit](https://cli.run.pivotal.io/stable?release=redhat64&version=$VERSION&source=github-rel)
+- [Mac OS X 64 bit](https://cli.run.pivotal.io/stable?release=macosx64&version=$VERSION&source=github-rel)
+- [Windows 32 bit](https://cli.run.pivotal.io/stable?release=windows32&version=$VERSION&source=github-rel)
+- [Windows 64 bit](https://cli.run.pivotal.io/stable?release=windows64&version=$VERSION&source=github-rel)
+
+Binaries
+--------
+- [Linux 32 bit binary]   (https://cli.run.pivotal.io/stable?release=linux32-binary&version=$VERSION&source=github-rel)
+- [Linux 64 bit binary]   (https://cli.run.pivotal.io/stable?release=linux64-binary&version=$VERSION&source=github-rel)
+- [Mac OS X 64 bit binary](https://cli.run.pivotal.io/stable?release=macosx64-binary&version=$VERSION&source=github-rel)
+- [Windows 32 bit binary] (https://cli.run.pivotal.io/stable?release=windows32-exe&version=$VERSION&source=github-rel)
+- [Windows 64 bit binary] (https://cli.run.pivotal.io/stable?release=windows64-exe&version=$VERSION&source=github-rel)
+
+Change Log
+----------
+NOTES

@@ -5,9 +5,6 @@ go:
   - 1.8.x
 
 install:
-  - go get github.com/onsi/ginkgo/ginkgo
-  - go get github.com/onsi/gomega
-  - go get github.com/tools/godep
-  - godep restore -v
+  - scripts/setup
 
-script: ginkgo
+script: scripts/test

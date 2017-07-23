@@ -1,0 +1,10 @@
+language: go
+go:
+  - 1.6
+install:
+  - go get -v github.com/tools/godep
+  - go get -v github.com/onsi/ginkgo/ginkgo
+script:  bin/test -nodes=2 -compilers=2
+branches:
+  only:
+  - master

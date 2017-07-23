@@ -1,0 +1,12 @@
+---
+platform: windows
+
+inputs:
+- name: cf-cli-binaries
+- name: cli
+
+outputs:
+- name: winstallers
+
+run:
+  path: cli/ci/tasks/create-installers-windows.bat

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -e
+
+install_glide() {
+  if [[ $(uname) == "Darwin" ]]; then
+    printf "\nInstalling glide...\n"
+    brew install glide
+  else
+    printf "\nPlease install glide: http://glide.sh/\n"
+    exit 1
+  fi
+}
+
+if ! [ -x "$(command -v glide)" ]; then
+  install_glide
+fi
+
+go get -u github.com/onsi/ginkgo/ginkgo
