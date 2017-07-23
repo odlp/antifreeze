@@ -8,8 +8,19 @@ Doubleplusgood with [Autopilot](https://github.com/concourse/autopilot), a CF CL
 
 ## Installation
 
+[Download the latest release][latest-release] and place the binary on your path, e.g. `/usr/local/bin/antifreeze`.
+Then run:
+
 ```sh
-go get github.com/odlp/antifreeze
+cf install-plugin /usr/local/bin/antifreeze
+```
+
+[latest-release]: https://github.com/odlp/antifreeze/releases/latest
+
+Or if you have go installed:
+
+```sh
+go get -u github.com/odlp/antifreeze
 cf install-plugin $GOPATH/bin/antifreeze
 ```
 
