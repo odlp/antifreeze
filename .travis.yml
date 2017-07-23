@@ -5,6 +5,6 @@ go:
   - 1.8.x
 
 install:
-  - scripts/setup
+  - go get -u github.com/onsi/ginkgo/ginkgo
 
 script: scripts/test
