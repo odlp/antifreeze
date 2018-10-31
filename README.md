@@ -8,7 +8,18 @@ Doubleplusgood with [Autopilot](https://github.com/concourse/autopilot), a CF CL
 
 ## Installation
 
-[Download the latest release][latest-release] and place the binary on your path, e.g. `/usr/local/bin/antifreeze`.
+```
+# For MacOS:
+cf install-plugin https://github.com/odlp/antifreeze/releases/download/v0.4.0/antifreeze-darwin
+
+# For Linux
+cf install-plugin https://github.com/odlp/antifreeze/releases/download/v0.4.0/antifreeze-linux
+
+# For Windows
+cf install-plugin https://github.com/odlp/antifreeze/releases/download/v0.4.0/antifreeze.exe
+```
+
+Alternatively [download the latest release][latest-release] and place the binary on your path, e.g. `/usr/local/bin/antifreeze`.
 Then run:
 
 ```sh
@@ -17,7 +28,7 @@ cf install-plugin /usr/local/bin/antifreeze
 
 [latest-release]: https://github.com/odlp/antifreeze/releases/latest
 
-Or if you have go installed:
+Or if you have `go` installed:
 
 ```sh
 go get -u github.com/odlp/antifreeze
