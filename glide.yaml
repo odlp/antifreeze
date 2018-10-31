@@ -1,7 +1,6 @@
 package: github.com/odlp/antifreeze
 import:
 - package: github.com/cloudfoundry/cli
-  version: 20c7d6fb8eb75562c66b4d35423b3788295fc932
   subpackages:
   - plugin
   - plugin/models
@@ -24,7 +23,6 @@ import:
   - reporters/stenographer
   - types
 - package: github.com/onsi/gomega
-  version: 7ce781ea776b2fd506491011353bded2e40c8467
   subpackages:
   - format
   - internal/assertion
@@ -38,4 +36,3 @@ import:
   - matchers/support/goraph/util
   - types
 - package: gopkg.in/yaml.v2
-  version: a83829b6f1293c91addabc89d0571c246397bbf4

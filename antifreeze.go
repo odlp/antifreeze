@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/cloudfoundry/cli/plugin"
+	"code.cloudfoundry.org/cli/plugin"
 
 	"gopkg.in/yaml.v2"
 )
@@ -50,12 +50,12 @@ func (c *AntifreezePlugin) GetMetadata() plugin.PluginMetadata {
 		Name: "antifreeze",
 		Version: plugin.VersionType{
 			Major: 0,
-			Minor: 3,
+			Minor: 4,
 			Build: 0,
 		},
 		MinCliVersion: plugin.VersionType{
 			Major: 6,
-			Minor: 7,
+			Minor: 30,
 			Build: 0,
 		},
 		Commands: []plugin.Command{
